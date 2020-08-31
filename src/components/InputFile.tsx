@@ -26,27 +26,42 @@ const InputFile = (props: any) => {
   const getData = (text: string) => {
     const packagesSplitted = text.split("\n\n");
 
-    const data = packagesSplitted.map((currentPackage, id) => {
-      const name = currentPackage.slice(9, currentPackage.indexOf("\n"));
+    const data: {
+      name: string;
+      description: string;
+      depends: any[];
+      id: number;
+    }[] = packagesSplitted
+      .map((currentPackage, id) => {
+        const name = currentPackage.slice(9, currentPackage.indexOf("\n"));
 
-      const descriptionStart = currentPackage.indexOf("Description:");
-      const description = currentPackage
-        .slice(descriptionStart)
-        .replace(/Homepage.+/, "")
-        .replace("Description: ", "");
+        const descriptionStart = currentPackage.indexOf("Description:");
+        const description = currentPackage
+          .slice(descriptionStart)
+          .replace(/Homepage.+/, "")
+          .replace("Description: ", "");
 
-      const dependStart = currentPackage.indexOf("Depends:");
-      const depends =
-        dependStart > -1
-          ? currentPackage
-              .slice(dependStart + 9, currentPackage.indexOf("\n", dependStart))
-              .replace(/\(.+\)/, "")
-              .split(",")
-          : [];
+        const dependStart = currentPackage.indexOf("Depends:");
+        const depends =
+          dependStart > -1
+            ? currentPackage
+                .slice(
+                  dependStart + 9,
+                  currentPackage.indexOf("\n", dependStart)
+                )
+                .replace(/\(.+\)/, "")
+                .split(",")
+            : [];
 
-      const packageData = { name, description, depends, id: id + 1 };
-      return packageData;
-    }).filter(pack => pack.name);
+        const packageData = { name, description, depends, id };
+        return packageData;
+      })
+      .filter((elem) => elem.name);
+
+    data.sort(sortByName);
+    data.forEach((pack, i) => {
+      pack.id = i + 1;
+    });
 
     /**
      * Format depends field to show ID of the package, not package name
@@ -65,7 +80,6 @@ const InputFile = (props: any) => {
         .filter((elem) => elem);
     });
 
-    data.sort(sortByName)
     setPackages(data);
     setFilteredPackages(data);
     history.push("/packages");
@@ -84,7 +98,7 @@ const InputFile = (props: any) => {
   const showMockData = () => {
     getData(mockData);
   };
-  
+
   return (
     <div className="container">
       <h1 className="paragraph">

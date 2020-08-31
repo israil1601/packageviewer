@@ -18,7 +18,6 @@ const PackageDetails = (props) => {
   };
 
   const onBack = () => history.push("/packages")
-
   return (
     <div className="card-details-container">
       <Card className="package-details-card">
@@ -31,10 +30,10 @@ const PackageDetails = (props) => {
               Dependancies:{" "}
               {depends.length
                 ? depends.map((elem) => (
-                    <span><Button variant="outline-primary" onClick={() => onRedirect(elem.id)} key={elem.id}>
+                    <Button variant="outline-primary" onClick={() => onRedirect(elem.id)} key={elem.id}>
                       {elem.name}
-                    </Button>{" "}
-                    </span>
+                    </Button>
+                    
                   ))
                 : "None"}
             </span>
