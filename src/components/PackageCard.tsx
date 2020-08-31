@@ -13,7 +13,6 @@ const PackageCard = (props) => {
       const url = "/packages/" + id;
       history.push(url);
     }
-    const depends = props.package.depends.map(elem => packages[elem - 1]);
     return (
         <Card className="package-card-container ">
   <Card.Header>Package</Card.Header>

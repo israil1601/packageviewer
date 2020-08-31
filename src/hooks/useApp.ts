@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState} from 'react';
 
 export const useApp = () => {
     const [packages, setPackages] = useState([]);
