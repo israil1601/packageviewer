@@ -3,7 +3,6 @@ import { Navbar, Form, FormControl, Button, Nav } from 'react-bootstrap';
 import AppContext from './AppContext';
 import { Redirect } from 'react-router';
 
-
 const Navigation = () => {
   const {setFilteredPackages, packages, setPackages} = useContext(AppContext);
   const input = React.createRef<any>()
@@ -20,8 +19,7 @@ const Navigation = () => {
   }
 
   return (
-    <div>
-  <Navbar bg="dark" variant="dark">
+  <Navbar bg="dark" variant="dark" fixed="top">
     <Navbar.Brand >Package Viewer</Navbar.Brand>
     <Nav.Link onClick={reset}>New file</Nav.Link>
     <Nav className="mr-auto">
@@ -31,7 +29,6 @@ const Navigation = () => {
       <Button variant="outline-info" onClick={onSearch}>Search</Button>
     </Form>
   </Navbar>
-    </div>
 );
 }
 
