@@ -1,0 +1,16 @@
+.package-card-container {
+    width: 300px;
+    margin-top: 20px;
+}
+
+.description {
+    height: 60px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 10px;
+}
+
+.package-title {
+    height: 35px;
+}

@@ -1,36 +1,56 @@
 import React, { useContext } from "react";
-import { Form } from "react-bootstrap";
-import { Redirect, useHistory } from "react-router";
-import PackageCard from "./PackageCard";
+import { Form, Button } from "react-bootstrap";
+import { useHistory } from "react-router";
 import AppContext from "./AppContext";
-
+import "../styles/InputFile.css";
+import mockData from "../mock-status";
 
 const InputFile = (props: any) => {
   const { setPackages, setFilteredPackages } = useContext(AppContext);
   const history = useHistory();
-  const getData = (str: string) => {
-    const arr = str.split("\n\n");
 
-    const data = arr.map((pack, id) => {
-      const name = pack.slice(9, pack.indexOf("\n"));
-      const descriptionStart = pack.indexOf("Description:");
-      const description = pack
+  /**
+   * Helper function for sorting
+   */
+  const sortByName = (a, b) => {
+    const name1 = a.name.toLowerCase();
+    const name2 = b.name.toLowerCase();
+    return name1 < name2 ? -1 : name1 > name2 ? 1 : 0;
+  };
+
+  /**
+   * Format raw text from status file
+   * Input: text from status file
+   * Return: Array of objects with name, description, depends and id properties
+   */
+  const getData = (text: string) => {
+    const packagesSplitted = text.split("\n\n");
+
+    const data = packagesSplitted.map((currentPackage, id) => {
+      const name = currentPackage.slice(9, currentPackage.indexOf("\n"));
+
+      const descriptionStart = currentPackage.indexOf("Description:");
+      const description = currentPackage
         .slice(descriptionStart)
         .replace(/Homepage.+/, "")
         .replace("Description: ", "");
-      const dependStart = pack.indexOf("Depends:");
+
+      const dependStart = currentPackage.indexOf("Depends:");
       const depends =
         dependStart > -1
-          ? pack
-              .slice(dependStart + 9, pack.indexOf("\n", dependStart))
+          ? currentPackage
+              .slice(dependStart + 9, currentPackage.indexOf("\n", dependStart))
               .replace(/\(.+\)/, "")
               .split(",")
           : [];
-      const obj = { name, description, depends, id: id + 1 };
-      // return <PackageCard name={name} key={i} description={description} depends={depends}/>
-      return obj;
-    });
 
+      const packageData = { name, description, depends, id: id + 1 };
+      return packageData;
+    }).filter(pack => pack.name);
+
+    /**
+     * Format depends field to show ID of the package, not package name
+     */
     const dataMap = new Map();
     data.forEach((v) => dataMap.set(v.name, v));
     data.forEach((v) => {
@@ -44,11 +64,11 @@ const InputFile = (props: any) => {
         })
         .filter((elem) => elem);
     });
-    // console.log(data);
+
+    data.sort(sortByName)
     setPackages(data);
     setFilteredPackages(data);
-    // return <Redirect to="/packages"/>
-    history.push("/packages")
+    history.push("/packages");
   };
 
   const inputForm: React.RefObject<HTMLInputElement> = React.createRef();
@@ -58,20 +78,34 @@ const InputFile = (props: any) => {
     if (inputFiles.length > 0) {
       const text = await inputFiles[0].text();
       getData(text);
-      // props.onFileInput(getData(text));
     }
   };
+
+  const showMockData = () => {
+    getData(mockData);
+  };
+  
   return (
-    <div>
-      <Form>
+    <div className="container">
+      <h1 className="paragraph">
+        Upload "status" file from /var/lib/dpkg/status to view your packages
+        nicley formatted.
+      </h1>
+      <Form className="file-input">
         <Form.File
           id="custom-file"
-          label="Custom file input"
+          label="Upload status file"
           custom
           onChange={loadFile}
           ref={inputForm}
         />
       </Form>
+      <p>
+        <Button variant="link" onClick={showMockData}>
+          Click here
+        </Button>{" "}
+        to view mock data instead.
+      </p>
     </div>
   );
 };

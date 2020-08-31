@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Card, Button } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 import AppContext from './AppContext';
+import "../styles/PackageCard.css";
 
 const PackageCard = (props) => {
     const {packages} = useContext(AppContext)
@@ -14,13 +15,11 @@ const PackageCard = (props) => {
     }
     const depends = props.package.depends.map(elem => packages[elem - 1]);
     return (
-        <Card style={{
-          width: "300px"
-        }}>
+        <Card className="package-card-container ">
   <Card.Header>Package</Card.Header>
   <Card.Body>
-    <Card.Title>{props.package.name}</Card.Title>
-    <Card.Text>
+    <Card.Title className="package-title">{props.package.name}</Card.Title>
+    <Card.Text className="description">
       {description}
     </Card.Text>
     <Button variant="primary" onClick={() => onRedirect(props.package.id)}>View Details</Button>

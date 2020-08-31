@@ -1,20 +1,29 @@
 import React, { useContext } from 'react';
 import { Navbar, Form, FormControl, Button, Nav } from 'react-bootstrap';
 import AppContext from './AppContext';
+import { Redirect } from 'react-router';
 
 
 const Navigation = () => {
-  const {setFilteredPackages, packages} = useContext(AppContext);
+  const {setFilteredPackages, packages, setPackages} = useContext(AppContext);
   const input = React.createRef<any>()
   const onSearch = () => {
     const searchValue = input.current.value;
     const filteredPackages = packages.filter(elem => elem.name.toLowerCase().includes(searchValue.toLowerCase()));
     setFilteredPackages(filteredPackages);
   }
+
+  const reset = () => {
+    setPackages([]);
+    setFilteredPackages([]);
+    return <Redirect to="/"/>
+  }
+
   return (
     <div>
   <Navbar bg="dark" variant="dark">
     <Navbar.Brand >Package Viewer</Navbar.Brand>
+    <Nav.Link onClick={reset}>New file</Nav.Link>
     <Nav className="mr-auto">
     </Nav>
     <Form inline>
