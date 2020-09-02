@@ -1,19 +1,18 @@
-.card-details-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;
+.package-details-tabs {
+    margin-top: 56px;
 }
 
-.package-details-card {
-    width: 50vw;
+.package-details-container {
+    margin: 20px;
 }
 
-.package-details-depends {
-    margin: 10px 0px;
-    display: block;
+.package-details-list-item {
+    color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+    cursor: pointer;
 }
 
-.package-details-button {
-    padding: 0;
+.package-details-list-item:hover {
+    text-decoration: underline;
 }
