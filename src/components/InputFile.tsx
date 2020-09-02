@@ -49,10 +49,11 @@ const InputFile = (props: any) => {
                   dependStart + 9,
                   currentPackage.indexOf("\n", dependStart)
                 )
-                .replace(/\(.+\)/, "")
+                .replace(/\(.+?\)/g, "")
                 .split(",")
+                
             : [];
-
+          
         const packageData = { name, description, depends, id };
         return packageData;
       })
@@ -71,11 +72,14 @@ const InputFile = (props: any) => {
     data.forEach((v) => {
       v.depends = v.depends
         .map((elem) => {
-          const i = dataMap.get(elem.trim());
-          if (i) {
-            return i.id;
+          let i = dataMap.get(elem.trim());
+          if (!i) return null;
+          let pipeChar = i.name.indexOf("|");
+          if (pipeChar > -1) {
+            i.name = i.slice(0, pipeChar - 1);
           }
-          return null;
+            return i.id;
+          
         })
         .filter((elem) => elem);
     });
